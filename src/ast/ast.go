@@ -15,7 +15,6 @@ type Statement interface {
 	statementNode()
 }
 
-
 type Expression interface {
 	Node
 	expressionNode()
@@ -58,20 +57,19 @@ func (i *Identifier) String() string {
 	return i.Value
 }
 
-//return 语句的解析
+// return 语句的解析
 type ReturnStatemnet struct {
-	Token token.Token
+	Token       token.Token
 	ReturnValue Expression
-} 
+}
 
 func (rs *ReturnStatemnet) statementNode() {}
 func (rs *ReturnStatemnet) TokenLiteral() string {
 	return rs.Token.Literal
 }
 
-
 type ExpressionStatement struct {
-	Token token.Token
+	Token      token.Token
 	Expression Expression
 }
 
@@ -80,16 +78,13 @@ func (es *ExpressionStatement) TokenLiteral() string {
 	return es.Token.Literal
 }
 
-
 func (p *Program) String() string {
 	var out bytes.Buffer
-	for _ , s := range p.Statements {
+	for _, s := range p.Statements {
 		out.WriteString(s.String())
 	}
 	return out.String()
 }
-
-
 
 func (ls *LetStatement) String() string {
 	var out bytes.Buffer
@@ -103,7 +98,6 @@ func (ls *LetStatement) String() string {
 	return out.String()
 }
 
-
 func (rs *ReturnStatemnet) String() string {
 	var out bytes.Buffer
 	out.WriteString(rs.TokenLiteral() + " ")
@@ -114,14 +108,12 @@ func (rs *ReturnStatemnet) String() string {
 	return out.String()
 }
 
-
 func (es *ExpressionStatement) String() string {
 	if es.Expression != nil {
 		return es.Expression.String()
 	}
 	return " "
 }
-
 
 type IntegerLiteral struct {
 	Token token.Token
@@ -132,15 +124,14 @@ func (il *IntegerLiteral) expressionNode() {}
 func (il *IntegerLiteral) TokenLiteral() string {
 	return il.Token.Literal
 }
-func (il *IntegerLiteral)String() string {
+func (il *IntegerLiteral) String() string {
 	return il.Token.Literal
 }
 
-
 type PrefixExpression struct {
-	Token token.Token
+	Token    token.Token
 	Operator string
-	Right Expression
+	Right    Expression
 }
 
 func (pe *PrefixExpression) expressionNode() {}
@@ -157,17 +148,17 @@ func (pe *PrefixExpression) String() string {
 }
 
 type InfixExpression struct {
-	Token token.Token
-	Left Expression
+	Token    token.Token
+	Left     Expression
 	Operator string
-	Right Expression
+	Right    Expression
 }
 
 func (ie *InfixExpression) expressionNode() {}
 func (ie *InfixExpression) TokenLiteral() string {
 	return ie.Token.Literal
 }
-func (ie *InfixExpression)String() string {
+func (ie *InfixExpression) String() string {
 	var out bytes.Buffer
 	out.WriteString("(")
 	out.WriteString(ie.Left.String())
@@ -175,4 +166,18 @@ func (ie *InfixExpression)String() string {
 	out.WriteString(ie.Right.String())
 	out.WriteString(")")
 	return out.String()
+}
+
+// bool数值
+type Boolean struct {
+	Token token.Token
+	Value bool
+}
+
+func (b *Boolean) expressionNode() {}
+func (b *Boolean) TokenLiteral() string {
+	return b.Token.Literal
+}
+func (b *Boolean) String() string {
+	return b.Token.Literal
 }
